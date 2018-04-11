@@ -21,17 +21,54 @@ declare(strict_types=1);
 
 namespace CLAMasks;
 
-use pocketmine\plugin\PluginBase;
-use pocketmine\utils\TextFormat;
-
 use CLAMasks\task\MaskTask;
+use CLAMasks\Commands\MaskCommand;
+use pocketmine\command\overload\CommandEnum;
+use pocketmine\command\overload\CommandParameter;
+use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
+use pocketmine\utils\TextFormat as C;
 
 class Main extends PluginBase{
 
-    const PREFIX = "v1.0.1";
+    private static $instance;
 
     public function onEnable() : void{
-        $this->getServer()->getScheduler()->scheduleRepeatingTask(new MaskTask($this), 0);
-        $this->getLogger()->info(TextFormat::GREEN . "CLAMasks " . self::PREFIX . " Enabled!");
+        self::$instance = $this;
+        if (!file_exists($this->getDataFolder()."config.yml")){
+            $this->initConfig();
+        }
+        $this->registerCommands();
+        $this->getServer()->getScheduler()->scheduleRepeatingTask(new MaskTask($this), 20);
+        $this->getLogger()->info(C::GREEN."Enabled!");
+    }
+
+    public static function getInstance() : Main{
+        return self::$instance;
+    }
+
+    private function registerCommands() : void{
+        $cmdmap = $this->getServer()->getCommandMap();
+        $cmdmap->register("CLAMasks", new MaskCommand("masks", $this));
+        $masks = $cmdmap->getCommand("masks");
+        $masks->setDescription("Masks Command.");
+        if ($this->getServer()->getName() == "Altay"){
+            $masks->getOverload("default")->setParameter(0, new CommandParameter("options", CommandParameter::ARG_TYPE_STRING, false, new CommandEnum("options", ["give", "list"])));
+        }
+    }
+
+    private function initConfig() : Config{
+        return new Config($this->getDataFolder()."config.yml", Config::YAML, [
+           "Masks" => array(),
+        ]);
+    }
+
+    public function getConf($get){
+        $config = new Config($this->getDataFolder()."config.yml");
+        return $config->get($get);
+    }
+
+    public function onDisable() : void{
+        $this->getLogger()->info(C::RED."Disabled!");
     }
 }

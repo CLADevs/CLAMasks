@@ -21,35 +21,30 @@ declare(strict_types=1);
 
 namespace CLAMasks\task;
 
+use CLAMasks\Main;
 use pocketmine\item\Item;
 use pocketmine\scheduler\PluginTask;
 use pocketmine\entity\{
     Effect, EffectInstance
 };
 
-use CLAMasks\Main;
-
 class MaskTask extends PluginTask{
-
-    /** @var Main */
-    private $plugin;
 
     public function __construct(Main $plugin){
         parent::__construct($plugin);
-        $this->plugin = $plugin;
     }
 
     public function onRun(int $tick) : void{
-        foreach($this->plugin->getServer()->getOnlinePlayers() as $player){
-            $inv = $player->getArmorInventory();
+        foreach(Main::getInstance()->getServer()->getOnlinePlayers() as $players){
+            $inv = $players->getArmorInventory();
             $helmet = $inv->getHelmet();
             if($helmet->getId() === Item::MOB_HEAD){
                 switch($helmet->getDamage()){
                     case 0: //skeleton
-                        $player->addEffect(new EffectInstance(Effect::getEffect(Effect::SPEED), 10, 1, false));
+                        $players->addEffect(new EffectInstance(Effect::getEffect(Effect::SPEED), 10, 1, false));
                         return;
                     case 4: //creeper
-                        $player->addEffect(new EffectInstance(Effect::getEffect(Effect::SPEED), 10, 1, false));
+                        $players->addEffect(new EffectInstance(Effect::getEffect(Effect::JUMP_BOOST), 10, 1, false));
                         return;
                 }
             }
