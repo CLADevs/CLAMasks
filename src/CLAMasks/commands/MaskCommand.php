@@ -30,7 +30,9 @@ namespace CLAMasks\commands;
 
 use CLAMasks\Main;
 use pocketmine\command\CommandSender;
+use pocketmine\command\ConsoleCommandSender;
 use pocketmine\command\PluginCommand;
+use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
 class MaskCommand extends PluginCommand{
@@ -40,8 +42,21 @@ class MaskCommand extends PluginCommand{
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args) : bool{
-        if($sender->hasPermission("cla.masks")){
-            if(isset($args[0])){
+        if(empty($args[0])){
+            $sender->sendMessage(TextFormat::GRAY . "/masks <give | list>");
+            return false;
+        }
+
+        if($sender instanceof ConsoleCommandSender){
+            if($args[0] == "give"){
+                return true;
+            }
+            if($args[0] == "list"){
+                $sender->sendMessage(TextFormat::YELLOW . "Avaible Masks:");
+                foreach(Main::getInstance()->getConf("Masks") as $masks) $sender->sendMessage(TextFormat::GRAY . "- " . TextFormat::GREEN . $masks);
+            }
+        }elseif($sender instanceof Player){
+            if($sender->hasPermission("cla.masks")){
                 if($args[0] == "give"){
                     return true;
                 }
@@ -49,8 +64,11 @@ class MaskCommand extends PluginCommand{
                     $sender->sendMessage(TextFormat::YELLOW . "Avaible Masks:");
                     foreach(Main::getInstance()->getConf("Masks") as $masks) $sender->sendMessage(TextFormat::GRAY . "- " . TextFormat::GREEN . $masks);
                 }
+            }else{
+                $sender->sendMessage(TextFormat::RED . "You do not have permission to use this command");
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }
