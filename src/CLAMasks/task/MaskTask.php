@@ -1,6 +1,13 @@
 <?php
 
 /*
+ *    _____ _               __  __           _
+ *   / ____| |        /\   |  \/  |         | |
+ *  | |    | |       /  \  | \  / | __ _ ___| | _____
+ *  | |    | |      / /\ \ | |\/| |/ _` / __| |/ / __|
+ *  | |____| |____ / ____ \| |  | | (_| \__ \   <\__ \
+ *   \_____|______/_/    \_\_|  |_|\__,_|___/_|\_\___/
+ *
  * CLAMasks, a public masks plugin for PocketMine-MP
  * Copyright (C) 2017-2018 CLADevs
  *
@@ -24,9 +31,8 @@ namespace CLAMasks\task;
 use CLAMasks\Main;
 use pocketmine\item\Item;
 use pocketmine\scheduler\PluginTask;
-use pocketmine\entity\{
-    Effect, EffectInstance
-};
+use pocketmine\entity\Effect;
+use pocketmine\entity\EffectInstance;
 
 class MaskTask extends PluginTask{
 
@@ -40,10 +46,10 @@ class MaskTask extends PluginTask{
             $helmet = $inv->getHelmet();
             if($helmet->getId() === Item::MOB_HEAD){
                 switch($helmet->getDamage()){
-                    case 0: //skeleton
+                    case 0:
                         $players->addEffect(new EffectInstance(Effect::getEffect(Effect::SPEED), 10, 1, false));
                         return;
-                    case 4: //creeper
+                    case 4:
                         $players->addEffect(new EffectInstance(Effect::getEffect(Effect::JUMP_BOOST), 10, 1, false));
                         return;
                 }

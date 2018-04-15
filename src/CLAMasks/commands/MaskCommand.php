@@ -1,6 +1,13 @@
 <?php
 
 /*
+ *    _____ _               __  __           _
+ *   / ____| |        /\   |  \/  |         | |
+ *  | |    | |       /  \  | \  / | __ _ ___| | _____
+ *  | |    | |      / /\ \ | |\/| |/ _` / __| |/ / __|
+ *  | |____| |____ / ____ \| |  | | (_| \__ \   <\__ \
+ *   \_____|______/_/    \_\_|  |_|\__,_|___/_|\_\___/
+ *
  * CLAMasks, a public masks plugin for PocketMine-MP
  * Copyright (C) 2017-2018 CLADevs
  *
@@ -19,34 +26,30 @@
 
 declare(strict_types=1);
 
-namespace CLAMasks\Commands;
+namespace CLAMasks\commands;
 
 use CLAMasks\Main;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
 use pocketmine\Player;
-use pocketmine\utils\TextFormat as C;
+use pocketmine\utils\TextFormat;
 
-class MaskCommand extends PluginCommand {
+class MaskCommand extends PluginCommand{
 
-    public function __construct(string $name, Main $plugin) {
+    public function __construct(string $name, Main $plugin){
         parent::__construct($name, $plugin);
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args) : bool{
-        if ($sender instanceof Player){
-            if ($sender->hasPermission("cla.masks")){
-                if(isset($args[0])){
-                    if ($args[0] == "give"){
-                        return true;
-                    }
-                    if ($args[0] == "list"){
-                        $sender->sendMessage(C::YELLOW."Avaible Masks:");
-                        foreach (Main::getInstance()->getConf("Masks") as $masks){
-                            $sender->sendMessage(C::GRAY."- ".C::GREEN.$masks);
-                        }
-                        return true;
-                    }
+        if(!$sender instanceof Player) return false;
+        if($sender->hasPermission("cla.masks")){
+            if(isset($args[0])){
+                if($args[0] == "give"){
+                    return true;
+                }
+                if($args[0] == "list"){
+                    $sender->sendMessage(TextFormat::YELLOW . "Avaible Masks:");
+                    foreach(Main::getInstance()->getConf("Masks") as $masks) $sender->sendMessage(TextFormat::GRAY . "- " . TextFormat::GREEN . $masks);
                 }
             }
         }

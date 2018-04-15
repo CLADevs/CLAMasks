@@ -1,6 +1,13 @@
 <?php
 
 /*
+ *    _____ _               __  __           _
+ *   / ____| |        /\   |  \/  |         | |
+ *  | |    | |       /  \  | \  / | __ _ ___| | _____
+ *  | |    | |      / /\ \ | |\/| |/ _` / __| |/ / __|
+ *  | |____| |____ / ____ \| |  | | (_| \__ \   <\__ \
+ *   \_____|______/_/    \_\_|  |_|\__,_|___/_|\_\___/
+ *
  * CLAMasks, a public masks plugin for PocketMine-MP
  * Copyright (C) 2017-2018 CLADevs
  *
@@ -22,15 +29,16 @@ declare(strict_types=1);
 namespace CLAMasks;
 
 use CLAMasks\task\MaskTask;
-use CLAMasks\Commands\MaskCommand;
+use CLAMasks\commands\MaskCommand;
 use pocketmine\command\overload\CommandEnum;
 use pocketmine\command\overload\CommandParameter;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
-use pocketmine\utils\TextFormat as C;
+use pocketmine\utils\TextFormat;
 
 class Main extends PluginBase{
 
+    /** @var Main $instance */
     private static $instance;
 
     public function onEnable() : void{
@@ -40,10 +48,10 @@ class Main extends PluginBase{
         }
         $this->registerCommands();
         $this->getServer()->getScheduler()->scheduleRepeatingTask(new MaskTask($this), 20);
-        $this->getLogger()->info(C::GREEN."Enabled!");
+        $this->getLogger()->info(TextFormat::GREEN."Enabled!");
     }
 
-    public static function getInstance() : Main{
+    public static function getInstance() : self{
         return self::$instance;
     }
 
@@ -59,7 +67,7 @@ class Main extends PluginBase{
 
     private function initConfig() : Config{
         return new Config($this->getDataFolder()."config.yml", Config::YAML, [
-           "Masks" => array(),
+           "Masks" => [],
         ]);
     }
 
@@ -69,6 +77,6 @@ class Main extends PluginBase{
     }
 
     public function onDisable() : void{
-        $this->getLogger()->info(C::RED."Disabled!");
+        $this->getLogger()->info(TextFormat::RED."Disabled!");
     }
 }
