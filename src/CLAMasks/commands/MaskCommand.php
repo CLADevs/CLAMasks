@@ -31,7 +31,6 @@ namespace CLAMasks\commands;
 use CLAMasks\Main;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
-use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
 class MaskCommand extends PluginCommand{
@@ -41,7 +40,6 @@ class MaskCommand extends PluginCommand{
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args) : bool{
-        if(!$sender instanceof Player) return false;
         if($sender->hasPermission("cla.masks")){
             if(isset($args[0])){
                 if($args[0] == "give"){
