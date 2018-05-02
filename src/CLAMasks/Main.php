@@ -43,12 +43,10 @@ class Main extends PluginBase{
 
     public function onEnable() : void{
         self::$instance = $this;
-        if (!file_exists($this->getDataFolder()."config.yml")){
-            $this->initConfig();
-        }
+        if(!file_exists($this->getDataFolder() . "config.yml")) $this->initConfig();
         $this->registerCommands();
         $this->getServer()->getScheduler()->scheduleRepeatingTask(new MaskTask($this), 20);
-        $this->getLogger()->info(TextFormat::GREEN."Enabled!");
+        $this->getLogger()->info(TextFormat::GREEN . "CLAMasks  has been enabled!");
     }
 
     public static function getInstance() : self{
@@ -60,23 +58,17 @@ class Main extends PluginBase{
         $cmdmap->register("CLAMasks", new MaskCommand("masks", $this));
         $masks = $cmdmap->getCommand("masks");
         $masks->setDescription("Masks Command.");
-        if ($this->getServer()->getName() == "Altay"){
-            $masks->getOverload("default")->setParameter(0, new CommandParameter("options", CommandParameter::ARG_TYPE_STRING, false, new CommandEnum("options", ["give", "list"])));
-        }
+        if($this->getServer()->getName() == "Altay") $masks->getOverload("default")->setParameter(0, new CommandParameter("options", CommandParameter::ARG_TYPE_STRING, false, new CommandEnum("options", ["give", "list"])));
     }
 
     private function initConfig() : Config{
-        return new Config($this->getDataFolder()."config.yml", Config::YAML, [
-           "Masks" => [],
+        return new Config($this->getDataFolder() . "config.yml", Config::YAML, [
+            "Masks" => [],
         ]);
     }
 
     public function getConf($get){
-        $config = new Config($this->getDataFolder()."config.yml");
+        $config = new Config($this->getDataFolder() . "config.yml");
         return $config->get($get);
-    }
-
-    public function onDisable() : void{
-        $this->getLogger()->info(TextFormat::RED."Disabled!");
     }
 }

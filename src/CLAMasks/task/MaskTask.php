@@ -36,23 +36,18 @@ use pocketmine\entity\EffectInstance;
 
 class MaskTask extends PluginTask{
 
-    public function __construct(Main $plugin){
-        parent::__construct($plugin);
-    }
-
     public function onRun(int $tick) : void{
         foreach(Main::getInstance()->getServer()->getOnlinePlayers() as $players){
             $inv = $players->getArmorInventory();
             $helmet = $inv->getHelmet();
-            if($helmet->getId() === Item::MOB_HEAD){
-                switch($helmet->getDamage()){
-                    case 0:
-                        $players->addEffect(new EffectInstance(Effect::getEffect(Effect::SPEED), 10, 1, false));
-                        return;
-                    case 4:
-                        $players->addEffect(new EffectInstance(Effect::getEffect(Effect::JUMP_BOOST), 10, 1, false));
-                        return;
-                }
+            if(!$helmet->getId() === Item::MOB_HEAD) return;
+            switch($helmet->getDamage()){
+                case 0:
+                    $players->addEffect(new EffectInstance(Effect::getEffect(Effect::SPEED), 10, 1, false));
+                    return;
+                case 4:
+                    $players->addEffect(new EffectInstance(Effect::getEffect(Effect::JUMP_BOOST), 10, 1, false));
+                    return;
             }
         }
     }

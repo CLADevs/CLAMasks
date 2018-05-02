@@ -32,6 +32,7 @@ use CLAMasks\Main;
 use pocketmine\command\CommandSender;
 use pocketmine\command\ConsoleCommandSender;
 use pocketmine\command\PluginCommand;
+use pocketmine\item\Item;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
@@ -49,19 +50,55 @@ class MaskCommand extends PluginCommand{
 
         if($sender instanceof ConsoleCommandSender){
             if($args[0] == "give"){
-                return true;
+                if(Main::getInstance()->getServer()->getPlayer($args[2])){
+                    $player = Main::getInstance()->getServer()->getPlayer($args[2]);
+                    $name = $player->getName();
+                    switch($args[1]){
+                        case "skeleton":
+                            $player->getArmorInventory()->setHelmet(Item::get(Item::MOB_HEAD, 0, 1));
+                            $player->sendMessage(TextFormat::GREEN . "Your mask has been changed to skeleton!");
+                            $sender->sendMessage(TextFormat::GREEN . "You have changed $name's mask to skeleton'");
+                            break;
+                        case "creeper":
+                            $player->getArmorInventory()->setHelmet(Item::get(Item::MOB_HEAD, 4, 1));
+                            $player->sendMessage(TextFormat::GREEN . "Your mask has been changed to creeper!");
+                            $sender->sendMessage(TextFormat::GREEN . "You have changed $name's mask to creeper'");
+                            break;
+                    }
+                }else{
+                    $sender->sendMessage(TextFormat::RED . "Player not found");
+                    return false;
+                }
             }
             if($args[0] == "list"){
-                $sender->sendMessage(TextFormat::YELLOW . "Avaible Masks:");
+                $sender->sendMessage(TextFormat::YELLOW . "Avaliable Masks:");
                 foreach(Main::getInstance()->getConf("Masks") as $masks) $sender->sendMessage(TextFormat::GRAY . "- " . TextFormat::GREEN . $masks);
             }
         }elseif($sender instanceof Player){
             if($sender->hasPermission("cla.masks")){
                 if($args[0] == "give"){
-                    return true;
+                    if(Main::getInstance()->getServer()->getPlayer($args[2])){
+                        $player = Main::getInstance()->getServer()->getPlayer($args[2]);
+                        $name = $player->getName();
+                        switch($args[1]){
+                            case "skeleton":
+                                $player->getArmorInventory()->setHelmet(Item::get(Item::MOB_HEAD, 0, 1));
+                                $player->sendMessage(TextFormat::GREEN . "Your mask has been changed to skeleton!");
+                                $sender->sendMessage(TextFormat::GREEN . "You have changed $name's mask to skeleton'");
+                                break;
+                            case "creeper":
+                                $player->getArmorInventory()->setHelmet(Item::get(Item::MOB_HEAD, 4, 1));
+                                $player->sendMessage(TextFormat::GREEN . "Your mask has been changed to creeper!");
+                                $sender->sendMessage(TextFormat::GREEN . "You have changed $name's mask to creeper'");
+                                break;
+                        }
+                    }else{
+                        $sender->sendMessage(TextFormat::RED . "Player not found");
+                        return false;
+                    }
                 }
                 if($args[0] == "list"){
-                    $sender->sendMessage(TextFormat::YELLOW . "Avaible Masks:");
+                    $sender->sendMessage(TextFormat::YELLOW . "Avaliable Masks:");
                     foreach(Main::getInstance()->getConf("Masks") as $masks) $sender->sendMessage(TextFormat::GRAY . "- " . TextFormat::GREEN . $masks);
                 }
             }else{
