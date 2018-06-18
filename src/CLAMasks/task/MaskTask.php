@@ -30,11 +30,11 @@ namespace CLAMasks\task;
 
 use CLAMasks\Main;
 use pocketmine\item\Item;
-use pocketmine\scheduler\PluginTask;
+use pocketmine\scheduler\Task;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 
-class MaskTask extends PluginTask{
+class MaskTask extends Task{
 
     public function onRun(int $tick) : void{
         foreach(Main::getInstance()->getServer()->getOnlinePlayers() as $players){

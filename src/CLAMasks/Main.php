@@ -45,7 +45,7 @@ class Main extends PluginBase{
         self::$instance = $this;
         if(!file_exists($this->getDataFolder() . "config.yml")) $this->initConfig();
         $this->registerCommands();
-        $this->getServer()->getScheduler()->scheduleRepeatingTask(new MaskTask($this), 20);
+        $this->getScheduler()->scheduleRepeatingTask(new MaskTask(), 20);
         $this->getLogger()->info(TextFormat::GREEN . "CLAMasks  has been enabled!");
     }
 
